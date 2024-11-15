@@ -4,13 +4,14 @@
 	var/actual_leather_amount = max(0,(leather_amount/2))
 	var/actual_bones_amount = max(0,(bones_amount/2))
 
-	if(user?.stats.getPerk(PERK_BUTCHER)) // Master Butcher will now give full amounts defined in the creature's variables. Otherwise, it's only half, and no special items.
-		actual_leather_amount = max(0,(leather_amount))
-		actual_meat_amount = max(1,(meat_amount))
-		actual_bones_amount = max(0,(bones_amount))
-		if(has_special_parts)
-			for(var/animal_part in special_parts)
-				new animal_part(get_turf(src))
+	if(ishuman(user))
+		if(user.stats.getPerk(PERK_BUTCHER)) // Master Butcher will now give full amounts defined in the creature's variables. Otherwise, it's only half, and no special items.
+			actual_leather_amount = max(0,(leather_amount))
+			actual_meat_amount = max(1,(meat_amount))
+			actual_bones_amount = max(0,(bones_amount))
+			if(has_special_parts)
+				for(var/animal_part in special_parts)
+					new animal_part(get_turf(src))
 
 	if(actual_leather_amount > 0 && (stat == DEAD))
 		for(var/i=0;i<actual_leather_amount;i++)
@@ -37,12 +38,13 @@
 			blood_effect.update_icon()
 			qdel(src)
 		else
-			if(user?.stats.getPerk(PERK_BUTCHER))
-				if(user != src)
-					user.visible_message(SPAN_DANGER("[user] butchers \the [src] cleanly!"))
-				var/obj/effect/decal/cleanable/blood/blood_effect = new/obj/effect/decal/cleanable/blood/splatter(get_turf(src))
-				blood_effect.basecolor = bloodcolor
-				blood_effect.update_icon()
+			if(ishuman(user))
+				if(user.stats.getPerk(PERK_BUTCHER))
+					if(user != src)
+						user.visible_message(SPAN_DANGER("[user] butchers \the [src] cleanly!"))
+					var/obj/effect/decal/cleanable/blood/blood_effect = new/obj/effect/decal/cleanable/blood/splatter(get_turf(src))
+					blood_effect.basecolor = bloodcolor
+					blood_effect.update_icon()
 				qdel(src)
 			else
 				if(user != src)
@@ -202,7 +204,7 @@
 			silent = FALSE
 			return TRUE
 
-		if(paralysis && paralysis > 0)
+		if(paralysis)
 			handle_paralysed()
 			blinded = TRUE
 			stat = UNCONSCIOUS
@@ -214,11 +216,8 @@
 			sleeping = max(sleeping-1, 0)
 			blinded = TRUE
 			stat = UNCONSCIOUS
-		else if(resting)
-			if(halloss > 0)
-				adjustHalLoss(-3)
 
-		else
+		if(!sleeping && !paralysis)
 			stat = CONSCIOUS
 			if(halloss > 0)
 				adjustHalLoss(-1)
@@ -411,3 +410,8 @@
 	user.do_attack_animation(src)
 	spawn(1) updatehealth()
 	return TRUE
+
+/mob/living/carbon/superior_animal/getarmor(def_zone, type)
+	//log_and_message_admins("LOG 1.5: def_zone [def_zone] | type [type] | armor(type) [armor[type]].")
+	return armor[type]
+

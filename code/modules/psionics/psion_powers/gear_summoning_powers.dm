@@ -145,7 +145,11 @@
 			shield.can_block_proj = TRUE
 			shield.base_block_chance += 10
 			shield.adjustShieldDurability(-10, user)
-		usr.put_in_active_hand(shield)
+		if(usr.put_in_active_hand(shield))
+			return
+		STOP_PROCESSING(SSobj, shield)
+		qdel(shield)
+
 
 /mob/living/carbon/human/proc/psionic_shield_layered()
 	set category = "Psionic powers"
@@ -162,7 +166,10 @@
 			"You feel the rush of electric essence shocking your hand lightly before a psy-shield forms!"
 			)
 		playsound(usr.loc, pick('sound/effects/sparks1.ogg','sound/effects/sparks2.ogg','sound/effects/sparks3.ogg'), 50, 1, -3)
-		usr.put_in_active_hand(shield)
+		if(usr.put_in_active_hand(shield))
+			return
+		STOP_PROCESSING(SSobj, shield)
+		qdel(shield)
 
 
 /mob/living/carbon/human/proc/telekinetic_fist()
@@ -280,7 +287,7 @@
 /mob/living/carbon/human/psionic_tumor/proc/needle_n_thread()
 	set category = "Psionic powers"
 	set name = "Psionic Suture (1)"
-	set desc = "Expend one of your essence to create a psionic suture in hand, able to stop bleeding. If you are more psionically giften even help heal wounds."
+	set desc = "Expend one of your essence to create a psionic suture in hand, able to stop bleeding. If you are more psionically gifted, it can even help heal wounds."
 	var/psi_point_cost = 1
 	var/mob/living/carbon/human/user = src
 	var/obj/item/organ/internal/psionic_tumor/PT = user.first_organ_by_process(BP_PSION)

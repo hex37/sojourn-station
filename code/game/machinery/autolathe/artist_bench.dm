@@ -174,7 +174,7 @@
 	if(inspiration && user.stats.getPerk(PERK_ARTIST))
 		LStats = inspiration.calculate_statistics()
 
-	var/weight_mechanical = 0 + LStats[STAT_MEC]
+	//var/weight_mechanical = 0 + LStats[STAT_MEC] //currently unused for anything.
 	var/weight_cognition = 0 + LStats[STAT_COG]
 	var/weight_biology = 0 + LStats[STAT_BIO]
 	var/weight_robustness = 0 + LStats[STAT_ROB]
@@ -192,8 +192,9 @@
 			"shotgun" = 8 + weight_robustness,
 			"rifle" = 8 + weight_vigilance,
 			"sniper" = 8 + max(weight_vigilance + weight_cognition),
-			"gyro" = 1 + weight_robustness + weight_mechanical,
-			"grenade" = 8 + weight_toughness
+			//"gyro" = 1 + weight_robustness + weight_mechanical,
+			"heavy pistol" = 8 + weight_toughness
+			//"grenade" = 8 + weight_toughness
 		))
 
 		switch(gun_pattern)
@@ -203,14 +204,14 @@
 				R.damage_multiplier = 1.2 + rand(-2,4)/10
 				R.penetration_multiplier = 1.2 + (rand(-2,4)/10)
 				R.max_shells = rand(6,12)
-				R.fire_delay = rand(0.1,2)
+				R.fire_delay = pick(0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1,1.2,1.4,1.6,1.8,2)
 
 			if("magnum") //From consul.dm, Arbitrary values
 				R.caliber = CAL_MAGNUM
 				R.damage_multiplier = 1.2 + (rand(-1,5)/10)
 				R.penetration_multiplier = 1.2 + (rand(-1,5)/10)
 				R.max_shells = rand(8,16)
-				R.fire_delay = rand(0.5,2)
+				R.fire_delay = pick(0.5,0.6,0.7,0.8,0.9,1,1.2,1.4,1.6,1.8,2)
 
 			if("shotgun") //From bull.dm, Arbitrary values
 				R.caliber = CAL_SHOTGUN
@@ -227,7 +228,7 @@
 				R.max_shells = rand(11,21)
 				R.damage_multiplier = 1.2 + (rand(-1,4)/10)
 				R.penetration_multiplier = 1 + (rand(-3,3)/10)
-				R.fire_delay = rand(0.2,1)
+				R.fire_delay = pick(0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9,1)
 
 			if("sniper")//From sniper.dm, Arbitrary values
 				R.caliber = CAL_ANTIM
@@ -237,6 +238,15 @@
 				R.damage_multiplier = 1
 				R.penetration_multiplier = 1
 
+			if("heavy pistol")
+				R.caliber = pick(CAL_50)
+				R.damage_multiplier = 1.5 + rand(-1,5)/10
+				R.penetration_multiplier = 1.5 + (rand(-1,5)/10)
+				R.max_shells = rand(3,6)
+				R.fire_delay = pick(0.7,0.8,0.9,1,1.2,1.4)
+
+
+/*
 			if("gyro")//From gyropistol.dm, Arbitrary values
 				R.caliber = CAL_70
 				R.max_shells = rand(1,3)
@@ -255,7 +265,8 @@
 			R.init_firemodes = list(
 				list(mode_name="Single shot", mode_desc="fire one barrel at a time", burst=1, icon="semi"),
 				list(mode_name="Triple barrel",mode_desc="fire three barrels at once", burst=3, icon="auto"),
-				)
+
+				)*/
 		R.ensure_updates()
 		return R
 
@@ -309,8 +320,14 @@
 
 	var/obj/artwork = choose_full_art(ins_used, user)
 	var/datum/design/art
-	if(isobj(artwork))
+	if (isobj(artwork))
 		art = new()
+		var/setname = sanitizeSafe(input(user,"Name your creation. Keep empty for a random name.","Set Name",""), MAX_NAME_LEN)
+		if (setname)
+			artwork.name = setname
+		var/setdesc = sanitizeSafe(input(user,"Describe your creation. Keep empty for a random description.","Set Description",""), MAX_DESC_LEN)
+		if (setdesc)
+			artwork.desc = setdesc
 		randomize_materialas(artwork)
 		art.build_path = artwork.type
 		art.AssembleDesignInfo(artwork)

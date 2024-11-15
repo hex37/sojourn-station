@@ -128,6 +128,8 @@
 	var/wounding_mult = 1 // A multiplier on damage inflicted to and damage blocked by mobs
 
 	var/ignition_source = TRUE //Used for deciding if a projectile should blow up a benzin.
+	var/predetermed = null //Used for NPCs to sudo rng, uses define zones directly
+
 
 /obj/item/projectile/New()
 
@@ -169,6 +171,10 @@
 /obj/item/projectile/multiply_projectile_damage(newmult)
 	for(var/i in damage_types)
 		damage_types[i] *= i == HALLOSS ? 1 : newmult
+
+/obj/item/projectile/multiply_projectile_agony(newmult)
+	if(HALLOSS in damage_types)
+		damage_types[HALLOSS] *= newmult
 
 /obj/item/projectile/add_projectile_penetration(newmult)
 	armor_divisor = initial(armor_divisor) + newmult
@@ -381,10 +387,12 @@
 	if(faction_iff == target_mob.faction)
 		return FALSE
 
+	if(testing)
+		return TRUE
+
 	//roll to-hit
 	miss_modifier = 0
 	var/hit_zone = check_zone(def_zone)
-
 	var/result = PROJECTILE_FORCE_MISS
 	if(hit_zone)
 		def_zone = hit_zone //set def_zone, so if the projectile ends up hitting someone else later (to be implemented), it is more likely to hit the same part
@@ -708,11 +716,11 @@
 						if(istargetloc(target_mob) == 0)
 							def_zone = pick(BP_R_ARM, BP_L_ARM, BP_CHEST, BP_HEAD)
 						//head
-
-
+			//message_admins("predetermed = [predetermed] def_zone = [def_zone]")
+			if(predetermed)
+				def_zone = predetermed
 
 			result = target_mob.bullet_act(src, def_zone)//this returns mob's armor_check and another - see modules/mob/living/living_defense.dm
-
 
 	if(result == PROJECTILE_FORCE_MISS)
 		if (!testing) //doesnt matter, we collided with something, NIKO COME BACK HERE AND REVIEW THIS
@@ -888,15 +896,15 @@
 
 
 			if(has_drop_off) //Does this shot get weaker as it goes?
-				//log_and_message_admins("LOG 1: range shot [range_shot] | drop ap [ap_drop_off] | drop damg | [damage_drop_off] | penetrating [penetrating].")
+				//log_and_message_admins("LOG 1: range shot [range_shot] | drop ap [ap_drop_off] | drop damg | [damage_drop_off] | penetrating [penetrating] | armor_divisor [armor_divisor].")
 				range_shot++ //We get the distence form the shooter to what it hit
 				damage_drop_off = max(1, range_shot - affective_damage_range) / 100 //How far we were shot - are affective range. This one is for damage drop off
 				ap_drop_off = max(1, range_shot - affective_ap_range) //How far we were shot - are affective range. This one is for AP drop off
 
-				armor_divisor = max(0, armor_divisor - ap_drop_off)
+				armor_divisor = max(0.001, armor_divisor - (ap_drop_off * 0.01))
 
 				agony = max(0, agony - range_shot) //every step we lose one agony, this stops sniping with rubbers.
-				//log_and_message_admins("LOG 2| range shot [range_shot] | drop ap [ap_drop_off] | drop damg | [damage_drop_off] | penetrating [penetrating].")
+				//log_and_message_admins("LOG 2| range shot [range_shot] | drop ap [ap_drop_off] | drop damg | [damage_drop_off] | penetrating [penetrating] | armor_divisor [armor_divisor].")
 				if(damage_types[BRUTE])
 					damage_types[BRUTE] -= max(0, damage_drop_off - penetrating / 2) //1 penitration gives 25 tiles| 2 penitration 50 tiles making 0 drop
 

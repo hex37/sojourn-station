@@ -53,9 +53,29 @@
 	spawn_nothing_percentage = 60
 
 /obj/random/oddity_guns
-	name = "random oddities weapons spawn"
-	icon_state = "techloot-grey"
+	name = "Unstable cross rift"
+	desc = "A rift that has eaten a cross weapon. The rift seems to be only able to reseave rather then send."
+	icon = 'icons/obj/objects.dmi'
+	icon_state = "wormhole_unstable"
 	has_postspawn = TRUE
+	late_handling = TRUE
+	anchored = TRUE
+	var/anticheat = TRUE
+	alpha = 255
+	invisibility = 0
+	layer = SIGN_LAYER
+
+/obj/random/oddity_guns/propis_box
+	has_postspawn = TRUE
+	late_handling = FALSE
+
+/obj/random/oddity_guns/attack_hand(mob/user as mob)
+	if(anticheat)
+		to_chat(user, SPAN_NOTICE("The rift drops a rare cross item before you even lift a hand to it."))
+		late_handling()
+		anticheat = FALSE
+		qdel(src)
+	to_chat(user, SPAN_NOTICE("The rift is eating itself far to much to get any more out of it."))
 
 /obj/random/oddity_guns/item_to_spawn()
 	var/item_to_spawn = random_grabber()
@@ -139,8 +159,9 @@
 				/obj/item/gun_upgrade/mechanism/brass_kit = 1,
 				//Armor
 				/obj/item/clothing/suit/crimsoncross_regaloutfit = 0.1, //Little rarer then even soap
+				/obj/item/clothing/shoes/crimsoncross_warp = 1,
 				//Misc - things that are not a "gun" but still good for this
-				/obj/item/oddity/nt/seal = 1,
+				/obj/item/oddity/nt/seal = 0.5,
 				/obj/item/soap/bluespase = 0.5,
 				/obj/item/oddity/rare/moon_fragment = 0.2))
 

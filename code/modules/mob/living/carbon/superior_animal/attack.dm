@@ -9,7 +9,9 @@
 
 	var/damage = rand(melee_damage_lower, melee_damage_upper)
 
-	if(moved) damage *= move_attack_mult
+	if(moved)
+		damage *= move_attack_mult
+
 //Here we handle blocking chance against superior mobs, yeah.
 	if(isliving(A))
 		var/mob/living/L = A
@@ -106,15 +108,17 @@
 		return //Quick return
 	rounds_left -= rounds_per_fire //modular, tho likely will always be one
 	if(rounds_left <= 0 && mags_left >= 1) //If were out of ammo and can reload
-		mags_left -= 1
-		rounds_left = initial(rounds_left)
-		visible_message(reload_message)
-		if(mag_drop)
-			new mag_type(get_turf(src))
-		return
+		mob_reload()
 	if(rounds_left <= 0 && mags_left <= 0) //If were out of ammo and can't reload
 		ranged = FALSE
 		rapid = FALSE
+
+/mob/living/carbon/superior_animal/proc/mob_reload()
+	mags_left -= 1
+	rounds_left = initial(rounds_left)
+	visible_message(reload_message)
+	if(mag_drop)
+		new mag_type(get_turf(src))
 
 /mob/living/carbon/superior_animal/proc/Shoot(var/target, var/start, var/user, var/bullet = 0, var/obj/item/projectile/trace)
 	if(weakened)
@@ -128,7 +132,9 @@
 	if(!A)
 		return
 
-	var/def_zone = get_exposed_defense_zone(target)
+	var/def_zone = pickweight(zone_hit_rates)
+
+	//message_admins("pre-fire def_zone = [def_zone]")
 
 	var/datum/penetration_holder/trace_penetration
 
@@ -173,6 +179,7 @@
 			A.original_firer = src
 			if(friendly_to_colony)
 				A.friendly_to_colony = TRUE
+			A.predetermed = def_zone
 			A.launch(target, def_zone, firer_arg = src, angle_offset = offset_temp) //this is where we actually shoot the projectile
 			right_after_firing()
 			SEND_SIGNAL(src, COMSIG_SUPERIOR_FIRED_PROJECTILE, A)

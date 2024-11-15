@@ -34,7 +34,6 @@
 	icon = 'icons/obj/flora/jungletree.dmi'
 	name = "Tree stump"
 	desc = "Once a tall tree, now a small stub in the groumd, without a voice..."
-	anchored = FALSE
 	density = FALSE
 	icon_state = "tree_stump"
 	pixel_x = -50
@@ -80,7 +79,7 @@
 	var/tool_type = I.get_tool_type(user, usable_qualities, src)
 	if(tool_type==QUALITY_SAWING)
 		to_chat(user, SPAN_NOTICE("You start to cut the tree, felling it."))
-		if(I.use_tool(user, src, WORKTIME_SLOW, tool_type, FAILCHANCE_NORMAL, required_stat = STAT_ROB)) //it's....a tree, you're not just cutting it down but breaking it into useable segments. it's body based, not mec.
+		if(I.use_tool(user, src, WORKTIME_SLOW, tool_type, FAILCHANCE_NORMAL, required_stat = STAT_ROB)) //it's....a tree, you're not just cutting it down but breaking it into usable segments. it's body based, not mec.
 			playsound(loc, 'sound/items/tree_fall.ogg', 80, 1)
 			new /obj/plant_spawner/towercaps(get_turf(src))
 			new /obj/plant_spawner/towercaps(get_turf(src))

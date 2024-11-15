@@ -45,6 +45,7 @@
 
 /mob/living/simple_animal/hostile/hivemind/New()
 	. = ..()
+	real_name = name
 	if(!(real_name in GLOB.hivemind_mobs))
 		GLOB.hivemind_mobs.Add(real_name)
 	GLOB.hivemind_mobs[real_name]++
@@ -157,11 +158,11 @@
 	switch(severity)
 		if(1)
 			if(malfunction_chance < 15)
-				malfunction_chance = 15
+				malfunction_chance = 15 * GLOB.hive_data_float["hivemind_emp_mult"]
 		if(2)
 			if(malfunction_chance < 25)
-				malfunction_chance = 25
-	adjustFireLoss(rand(20,80)*severity)
+				malfunction_chance = 25 * GLOB.hive_data_float["hivemind_emp_mult"]
+	adjustFireLoss((rand(20,80)*severity * GLOB.hive_data_float["hivemind_emp_mult"]))
 
 /mob/living/simple_animal/hostile/hivemind/death()
 	GLOB.hivemind_mobs[real_name]--
@@ -899,7 +900,7 @@
 
 
 /mob/living/simple_animal/hostile/hivemind/mechiver/proc/destroy_passenger()
-	if(GLOB.hive_data_bool["prevent_gibbing_dead"])
+	if(GLOB.hive_data_bool["gibbing_warning_timer"])
 		qdel(passenger)
 	else
 		release_passenger(TRUE) //HAS to be true or we do an endless loop!

@@ -12,7 +12,7 @@
 	icon_state = "clothing"
 	steps = list(
 		list(CRAFT_MATERIAL, 2, MATERIAL_GLASS, "time" = 1),
-		list(QUALITY_WELDING, 40, "time" = 5), //Insainly quick do tobeing 1 sheet a time
+		list(QUALITY_WELDING, 40, "time" = 5), //Insanely quick do tobeing 1 sheet a time
 		list(CRAFT_MATERIAL, 1, MATERIAL_PLASMA, "time" = 1),
 		list(QUALITY_WELDING, 40, "time" = 5),
 		list(QUALITY_SAWING, 30, "time" = 5)
@@ -309,7 +309,7 @@
 	result = /obj/item/gun/energy/laser/railgun/gauss
 	icon_state = "gun"
 	steps = list(
-		list(CRAFT_MATERIAL, 40, MATERIAL_PLASTEEL, "time" = 60),
+		list(CRAFT_MATERIAL, 30, MATERIAL_PLASTEEL, "time" = 60),
 		list(CRAFT_MATERIAL, 8, MATERIAL_GOLD, "time" = 20),
 		list(CRAFT_MATERIAL, 10, MATERIAL_SILVER, "time" = 20),
 		list(CRAFT_MATERIAL, 4, MATERIAL_PLATINUM, "time" = 20),

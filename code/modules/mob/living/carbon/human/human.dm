@@ -102,7 +102,7 @@
 	// TODO: Rig
 	// if(back && istype(back,/obj/item/rig))
 	// 	var/obj/item/rig/suit = back
-	
+
 	var/chemvessel_efficiency = get_organ_efficiency(OP_CHEMICALS)
 	if(chemvessel_efficiency > 1)
 		. += "Chemical Storage: [carrion_stored_chemicals]/[round(0.5 * chemvessel_efficiency)]"
@@ -993,8 +993,14 @@ var/list/rank_prefix = list(\
 						SPAN_WARNING("Your movement jostles [O] in your [organ.name] painfully."), \
 						SPAN_WARNING("Your movement jostles [O] in your [organ.name] painfully."))
 					to_chat(src, msg)
+
 				var/mob/living/carbon/human/H = organ.owner
 				if(!MOVING_DELIBERATELY(H))
+
+					//Unlike any other race syths main quirk of instantly dieing when battery is damaged is quite bad
+					if(species.reagent_tag == IS_SYNTHETIC && istype(organ, /obj/item/organ/external/chest))
+						continue
+
 					organ.take_damage(3, BRUTE, organ.max_damage, 6.7, TRUE, TRUE)	// When the limb is at 60% of max health, internal organs start taking damage.
 					if(organ.setBleeding())
 						organ.take_damage(2, BRUTE) //Extra 2 damage
@@ -1505,7 +1511,7 @@ var/list/rank_prefix = list(\
 		if(!istype(check_organ))
 			return 0
 		return check_organ.organ_can_feel_pain() */ //TODO: This also doesn't work on Eris :))
-	return !(species.flags & NO_PAIN)
+	return !((species.flags & NO_PAIN) || (PAIN_LESS in mutations))
 
 /mob/living/carbon/human/proc/check_self_for_injuries()
 	if(stat)
@@ -1701,3 +1707,16 @@ var/list/rank_prefix = list(\
 
 
 #undef SLIME_TRANSPARENCY
+
+//Typically works to set yourself on the top of same layers
+/mob/living/carbon/human/verb/move_to_top()
+	set name = "Move Self To Top"
+	set desc = "Try to move yourself on the tile to be ontop of everything."
+	set category = "IC"
+
+	if(!istype(loc, /turf) || usr.stat || usr.restrained() )
+		return
+
+	var/turf/T = loc
+	loc = null
+	loc = T

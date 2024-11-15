@@ -73,6 +73,9 @@
 #define GUN_UPGRADE_DAMAGE_CLONE "clone_damage"
 #define GUN_UPGRADE_DAMAGE_HALLOSS "hallucination_damage"
 #define GUN_UPGRADE_DAMAGE_RADIATION "radiation_damage"
+#define GUN_UPGRADE_MELEEDAMAGE "melee_damage"
+#define GUN_UPGRADE_MELEEPENETRATION "melee_penetration"
+#define GUN_UPGRADE_MELEE_DAMAGE_ADDITIVE "melee_damage_additive"
 
 #define GUN_UPGRADE_OFFSET "offset" //Constant offset, in degrees
 #define GUN_UPGRADE_ZOOM "zoom"
@@ -90,6 +93,7 @@
 #define GUN_UPGRADE_AUTOEJECT "autoeject"
 #define GUN_UPGRADE_CELLMINUS "small cell adapter"
 #define GUN_UPGRADE_THERMAL "thermal scope"
+#define GUN_UPGRADE_BAYONET "bayonet"
 #define GUN_UPGRADE_DNALOCK "biocoded"
 #define GUN_UPGRADE_FOREGRIP "foregrip"
 #define GUN_UPGRADE_BIPOD "bipod"
@@ -132,7 +136,7 @@
 					/obj/item/cell/small/moebius/nuclear = 1,\
 					/obj/item/cell/medium/moebius/hyper = 1,\
 					/obj/random/rig/always_spawn = 1.5,\
-					/obj/item/material/butterfly/frenchman = 0.1,/*insainly rare do to being a bad item*/\
+					/obj/item/material/butterfly/frenchman = 0.1,/*insanely rare do to being a bad item*/\
 					/obj/random/rig/damaged/always_spawn = 1.5,\
 					/obj/random/pouch/hardcase = 4,\
 					/obj/random/voidsuit = 4,\

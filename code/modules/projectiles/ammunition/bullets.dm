@@ -22,7 +22,10 @@
 	shell_color = "hv"
 	projectile_type = /obj/item/projectile/bullet/pistol_35/hv
 
-/obj/item/ammo_casing/pistol_35/hv/spent
+/obj/item/ammo_casing/pistol_35/spent/hv
+	shell_color = "hv"
+	icon_state = "pistol_c_hv"
+	spent_icon = "pistol_c_hv-spent"
 	projectile_type = null
 
 /obj/item/ammo_casing/pistol_35/practice
@@ -57,6 +60,10 @@
 	desc = "A 9mm hollow-point bullet casing."
 	shell_color = "l"
 	projectile_type = /obj/item/projectile/bullet/pistol_35/lethal
+
+/obj/item/ammo_casing/pistol_35/spent/lethal
+	projectile_type = null
+	shell_color = "l"
 
 /obj/item/ammo_casing/pistol_35/scrap
 	desc = "An old 9mm bullet casing."
@@ -378,7 +385,7 @@
 	caliber = CAL_FLARE
 	icon_state = "old-shell"
 	spent_icon = "old-shell-spent"
-	projectile_type = /obj/item/projectile/bullet/flare/choas
+	projectile_type = /obj/item/projectile/bullet/flare/chaos
 	matter = list(MATERIAL_PLASTIC = 1)
 	matter_reagents = list("phosphorus" = 3)
 	maxamount = 1
@@ -682,7 +689,7 @@
 
 /obj/item/ammo_casing/shotgun/laser/prespawned
 	amount = 5
-
+/*
 /obj/item/ammo_casing/shotgun/payload
 	name = "explosive shell"
 	desc = "A 20mm explosive shell."
@@ -695,7 +702,7 @@
 
 /obj/item/ammo_casing/shotgun/payload/prespawned
 	amount = 5
-
+*/
 /obj/item/ammo_casing/shotgun/plasma
 	name = "plasma shell"
 	desc = "A 20mm plasma shell."
@@ -791,7 +798,7 @@
 	name = "PG-7EMP grenade"
 	desc = "A 40mm EMP/Flash warhead designed for the RPG-7 launcher. Has a tubular shape."
 	projectile_type = /obj/item/projectile/bullet/rocket/emp
-
+/*
 /obj/item/ammo_casing/a75
 	name = "microjet casing"
 	desc = "A 19mm gyrojet rocket."
@@ -800,7 +807,7 @@
 
 /obj/item/ammo_casing/a75/spent
 	projectile_type = null
-
+*/
 /obj/item/ammo_casing/cap
 	name = "cap"
 	desc = "A cap for children toys."

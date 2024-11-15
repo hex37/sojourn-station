@@ -324,7 +324,7 @@
 
 	//Remove the seed if something is already planted.
 	if(seed) seed = null
-	seed = plant_controller.seeds[pick(list("reishi","nettles","amanita","mushrooms","plumphelmet","towercap","harebells","weeds"))]
+	seed = plant_controller.seeds[pick(list("reishi","nettles","amanita","chanterelle","plumphelmet","towercap","harebells","weeds"))]
 	if(!seed) return //Weed does not exist, someone fucked up.
 
 	dead = 0
@@ -654,6 +654,12 @@
 	return
 
 /obj/machinery/portable_atmospherics/hydroponics/attack_tk(mob/user as mob)
+	if(blue_ink_tk_blocker)
+		to_chat(usr, SPAN_WARNING("\blue Your psionic power has been inhibited by a force."))
+		return
+
+	//if forwhatever reason we allow teleportation trays
+
 	if(dead)
 		remove_dead(user)
 	else if(harvest)

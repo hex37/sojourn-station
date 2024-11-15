@@ -41,6 +41,10 @@
 		if (prob(extra_burrow_chance))
 			create_burrow(get_turf(src))
 
+	if(move_and_attack)
+		RegisterSignal(src, COMSIG_MOVABLE_MOVED, PROC_REF(movement_tech))
+
+
 	RegisterSignal(src, COMSIG_ATTACKED, PROC_REF(react_to_attack))
 
 /mob/living/carbon/superior_animal/Destroy()
@@ -344,7 +348,6 @@
 		set_glide_size(DELAY2GLIDESIZE(move_to_delay))
 		if (stat != DEAD)
 			SSmove_manager.move_to(src, targetted_mob, 1, move_to_delay)
-		moved = 1
 	handle_attacking_stance(targetted_mob, already_destroying_surroundings, can_see, ran_see_check)
 
 /mob/living/carbon/superior_animal/proc/handle_attacking_stance(var/atom/targetted_mob, var/already_destroying_surroundings = FALSE, can_see = TRUE, ran_see_check = FALSE)
@@ -507,11 +510,14 @@
 /// If critcheck = FALSE, will check if health is more than 0. Otherwise, if is a human, will check if theyre in hardcrit.
 /atom/proc/check_if_alive(var/critcheck = FALSE) //A simple yes no if were alive
 	if (critcheck)
-		if (istype(src, /mob/living/carbon/human))
-			if(health > HEALTH_THRESHOLD_CRIT) //only matters for humans
+		if (ishuman(src))
+			var/mob/living/carbon/human/H = src
+			if(H.health > HEALTH_THRESHOLD_CRIT) //only matters for humans
 				return TRUE
-			else
-				return FALSE
+			if(!H.resting && stat == CONSCIOUS)
+				return TRUE
+
+			return FALSE
 	if(health > 0)
 		return TRUE
 	return FALSE
@@ -733,3 +739,17 @@
 	if(istype(mover, /obj/item/projectile))
 		return stat ? TRUE : FALSE
 	. = ..()
+
+/mob/living/carbon/superior_animal/UnarmedAttack(atom/A, proximity)
+	. = ..()
+	if(!.)
+		return
+
+	if(poison_per_bite > 0)
+
+		if(isliving(A))
+			var/mob/living/L = A
+			if(istype(L) && L.reagents)
+				var/zone_armor =  L.getarmor(targeted_organ, ARMOR_MELEE)
+				var/poison_injected = zone_armor ? poison_per_bite * (-0.01 * zone_armor + 1) : poison_per_bite
+				L.reagents.add_reagent(poison_type, poison_injected)

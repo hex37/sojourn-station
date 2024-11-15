@@ -256,6 +256,10 @@
 	name = "Dreadlocks"
 	icon_state = "dreads"
 
+/datum/sprite_accessory/hair/dreadlocksalt
+	name = "Dreadlocks 2"
+	icon_state = "dreadsalt"
+
 /datum/sprite_accessory/hair/drillruru
 	name = "Drillruru"
 	icon_state = "drillruru"
@@ -319,6 +323,14 @@
 /datum/sprite_accessory/hair/glossy
 	name = "Glossy"
 	icon_state = "glossy"
+
+/datum/sprite_accessory/hair/gloomy
+	name = "Gloomy"
+	icon_state = "hair_gloomy"
+
+/datum/sprite_accessory/hair/gloomylong
+	name = "Gloomy Long"
+	icon_state = "hair_gloomylong"
 
 /datum/sprite_accessory/hair/gumshoe
 	name = "Gumshoe"

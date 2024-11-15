@@ -68,7 +68,7 @@
 		capa_amount++
 	capa_rating -= capa_amount
 
-	cell_charger_additon = capa_rating // theirs only 1 in dispenders min 34 max 120 RnD 60 Greyson 100
+	cell_charger_additon = capa_rating // There's only 1 in dispensers min 34 max 120 RnD 60 Greyson 100
 
 /obj/machinery/chemical_dispenser/proc/recharge()
 	if(stat & (BROKEN|NOPOWER)) return
@@ -296,7 +296,7 @@
 	simple_machinery = TRUE
 	level0 = list(
 		"water","ice","icetea","icegreentea","cola","spacemountainwind","dr_gibb","space_up",
-		"tonic","sodawater","lemon_lime","sugar","orangejuice","limejuice","lemonjuice", "pineapplejuice", "berryjuice","grapesoda","watermelonjuice")
+		"tonic","sodawater","lemon_lime","sugar","orangejuice","limejuice","lemonjuice", "pineapplejuice", "berryjuice","grapesoda","watermelonjuice","strawberryjuice")
 
 	level1 = list("capsaicin", "carbon")
 	level2 = list("banana", "triplecitrus")
@@ -310,7 +310,7 @@
 	var/list/data = ..()
 
 	data["use_smaller_units"] = TRUE
-	
+
 	return data
 
 /obj/machinery/chemical_dispenser/soda/hacked(mob/user)

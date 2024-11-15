@@ -159,7 +159,7 @@
 /obj/item/gun/projectile/automatic/ak47/sa/sawn
 	name = "sawn-off \"Kalashnikov\" rifle"
 	desc = "Weapon of the oppressed, oppressors, and extremists of all flavours. \
-	A copy of the AKM pattern chambered in 7.62mm and crudely sawed down to a shadow of its former self. Rifle was fine. Was."
+	A copy of the AKM pattern chambered in 7.62mm and crudely sawed down to a shadow of its former self. The Rifle was fine before. Was."
 	icon = 'icons/obj/guns/projectile/sawnoff/ak.dmi'
 	icon_state = "AK"
 	item_state = "AK"
@@ -275,14 +275,16 @@
 	var/iconstring = initial(icon_state)
 	var/itemstring = ""
 
+	cut_overlays()
+
 	if(ammo_magazine)
 		add_overlay("_mag[ammo_magazine.max_ammo]")
-	else
-		cut_overlays()
-		return
 
-	if (!ammo_magazine || !length(ammo_magazine.stored_ammo))
+	if(!ammo_magazine || !length(ammo_magazine.stored_ammo))
 		iconstring += "_slide"
+
+	if (bayonet)
+		add_overlay("bayonet")
 
 	icon_state = iconstring
 	set_item_state(itemstring)

@@ -44,7 +44,7 @@ var/global/blackshield_max_energy //Maximaum combined energy of all teleporters
 		/obj/item/ammo_magazine/light_rifle_257 = 30,
 		/obj/item/ammo_magazine/rifle_75 = 35,
 		/obj/item/ammo_magazine/speed_loader_shotgun = 35,
-		/obj/item/ammo_magazine/rifle_75_linked_box/empty = 65, // Empty linked mag for balance, making the Heroic actually useable if ordered.
+		/obj/item/ammo_magazine/rifle_75_linked_box/empty = 65, // Empty linked mag for balance, making the Heroic actually usable if ordered.
 		/obj/item/ammo_magazine/heavy_rifle_408 = 50,
 		/obj/item/ammo_magazine/sbaw = 50,
 		/obj/item/ammo_magazine/ammobox/pistol_35 = 75,
@@ -83,7 +83,7 @@ var/global/blackshield_max_energy //Maximaum combined energy of all teleporters
 		/obj/item/storage/firstaid/surgery/traitor = 250, //Advanced tools inside
 		/obj/item/computer_hardware/hard_drive/portable/design/blackshield = 500,
 		/obj/item/storage/firstaid/blackshield/large = 500,
-		/obj/item/stock_parts/blackshield/stskit = 750 //For making STS PARAs
+		/obj/item/stock_parts/blackshield/stskit = 150 //For making STS PARAs
 		)
 	var/entropy_value = 1 //It is still bluespace
 

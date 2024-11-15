@@ -16,21 +16,28 @@
 	serial_shown = FALSE
 	gun_tags = list(GUN_PROJECTILE, GUN_INTERNAL_MAG, GUN_REVOLVER)
 	init_recoil = HANDGUN_RECOIL(1.2)
+	gun_parts = null
+
+	var/fake_name
 
 /obj/item/gun/projectile/revolver/artwork_revolver/refresh_upgrades()
 	force = initial(force)
-	name = initial(name)
+	name = fake_name
 	if(wielded)
 		if(force_wielded_multiplier)
 			force = force * force_wielded_multiplier
 		else //This will give items wielded 30% more damage. This is balanced by the fact you cannot use your other hand.
 			force = (force * 1.3) //Items that do 0 damage will still do 0 damage though.
-		name = "[name] (Wielded)"
+		name = "[fake_name] (Wielded)"
 	return //Same reason why we dont have max upgrades, refreshing in this case is always bad
 
 /obj/item/gun/projectile/revolver/artwork_revolver/proc/ensure_updates()
 	if(caliber == CAL_PISTOL)
 		gun_tags = list(GUN_PROJECTILE, GUN_INTERNAL_MAG, GUN_REVOLVER, GUN_CALIBRE_9MM)// if we get 9mm then we should take 9mm upgrades
+
+	if(caliber == CAL_PISTOL)
+		gun_tags = list(GUN_PROJECTILE, GUN_INTERNAL_MAG, GUN_REVOLVER, GUN_CALIBRE_12MM)// if we get 12mm then we should take 12mm upgrades
+
 
 	if(recoil)
 		recoil = recoil.modifyAllRatings(1+rand(-2,2)/10)
@@ -38,9 +45,10 @@
 		init_recoil = HANDGUN_RECOIL(1.2)
 		recoil = getRecoil(arglist(init_recoil))
 		recoil = recoil.modifyAllRatings(1+rand(-2,2)/10)
+	name = fake_name
 
 /obj/item/gun/projectile/revolver/artwork_revolver/Initialize()
-	name = get_weapon_name(capitalize = TRUE)
+	fake_name = get_weapon_name(capitalize = TRUE)
 
 	var/random_icon = rand(1,5)
 	icon_state = "artwork_revolver_[random_icon]"
@@ -53,7 +61,7 @@
 
 /obj/item/gun/projectile/revolver/artwork_revolver/spin_cylinder()
 	set name = "Spin revolver"
-	set desc = "Fun when you're bored out of your skull. Or if you want to change your revolvers appearence."
+	set desc = "Fun when you're bored out of your skull. Or if you want to change your revolvers appearance."
 	set category = "Object"
 
 	chamber_offset = 0

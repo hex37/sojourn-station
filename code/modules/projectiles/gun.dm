@@ -110,6 +110,9 @@ For the sake of consistency, I suggest always rounding up on even values when ap
 	var/silenced = FALSE
 	var/fire_sound_silenced = 'sound/weapons/Gunshot_silenced.wav' //Firing sound used when silenced
 
+	//For bayonet icon handling
+	var/bayonet = FALSE
+
 	var/icon_contained = TRUE
 	var/static/list/item_icons_cache = list()
 	var/wielded_item_state = null
@@ -484,7 +487,7 @@ For the sake of consistency, I suggest always rounding up on even values when ap
 				plusing_intraction(I, user)
 				return
 
-			//This is litterly just a stop gap so you dont accidently decon your weapon.
+			//This is litteraly just a stop gap so you dont accidently decon your weapon.
 			if(QUALITY_SCREW_DRIVING)
 				..()
 				return
@@ -547,7 +550,7 @@ For the sake of consistency, I suggest always rounding up on even values when ap
 		if(extra_proj_penmult)
 			projectile.add_projectile_penetration(penetration_multiplier)
 
-		projectile.add_projectile_penetration(penetration_multiplier)
+		//projectile.add_projectile_penetration(penetration_multiplier) //Soj edit, no more phatom +1 ad should be moved to its own var rather then add AND mult
 
 		if(extra_proj_wallbangmult)
 			projectile.multiply_pierce_penetration(extra_proj_wallbangmult)
@@ -618,6 +621,7 @@ For the sake of consistency, I suggest always rounding up on even values when ap
 					SPAN_DANGER("You shoot yourself in the foot with \the [src]!")
 					)
 				user.drop_item()
+			currently_firing = FALSE	//Add this here or else people who have clumsy will permanently break guns and prevent them from firing if they fuck up with it.
 		else
 			handle_click_empty(user)
 		return FALSE
@@ -1068,6 +1072,12 @@ For the sake of consistency, I suggest always rounding up on even values when ap
 		var/datum/firemode/new_mode = firemodes[sel_mode]
 		new_mode.update(force_state)
 
+/obj/item/gun/proc/force_firemode_deselect(mob/user)
+	if (sel_mode && firemodes && firemodes.len)
+		var/datum/firemode/new_mode = firemodes[sel_mode]
+		new_mode.force_deselect(user)
+
+
 /obj/item/gun/AltClick(mob/user)
 	if(user.incapacitated())
 		to_chat(user, SPAN_WARNING("You can't do that right now!"))
@@ -1116,10 +1126,13 @@ For the sake of consistency, I suggest always rounding up on even values when ap
 /obj/item/gun/dropped(mob/user)
 	// I really fucking hate this but this is how this is going to work.
 	var/mob/living/carbon/human/H = user
+	if(wielded)
+		unwield(H)
 	if (istype(H) && H.using_scope)
 		toggle_scope(H)
 	update_firemode(FALSE)
 	.=..()
+	force_firemode_deselect(H)
 
 /obj/item/gun/swapped_from()
 	.=..()
